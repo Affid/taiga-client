@@ -1,3 +1,5 @@
 .idea
-Taiga Client.iml
+TaigaClient.iml
 src/test
+src/main/java/org/affid/taiga/Test.java
+target
