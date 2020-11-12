@@ -5,13 +5,15 @@ import org.json.JSONObject;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Random;
 
 public class Utils {
     static HttpURLConnection getConnection(URL url, boolean isHttps) throws IOException {
         HttpURLConnection con;
-        if(isHttps)
+        if (isHttps)
             con = (HttpsURLConnection) url.openConnection();
         else
             con = (HttpURLConnection) url.openConnection();
@@ -22,7 +24,7 @@ public class Utils {
         con.setDoOutput(true);
         OutputStream out = con.getOutputStream();
 
-        PrintWriter writer = new PrintWriter(out,true);
+        PrintWriter writer = new PrintWriter(out, true);
         writer.print(request);
         writer.flush();
         writer.close();
@@ -35,5 +37,28 @@ public class Utils {
         reader.close();
 
         return resp;
+    }
+
+
+    public static String getNextRandomString(String strAllowedCharacters, int length) {
+        Random random = new Random();
+        StringBuilder sbRandomString = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+
+            int randomInt = random.nextInt(strAllowedCharacters.length());
+
+            //get char from randomInt index from string and append in StringBuilder
+            sbRandomString.append(strAllowedCharacters.charAt(randomInt));
+        }
+
+        return sbRandomString.toString();
+
+    }
+
+    static void configure(HttpURLConnection con, String authToken, String method) throws ProtocolException {
+        con.setRequestMethod(method);
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Authorization", "Bearer " + authToken);
     }
 }
