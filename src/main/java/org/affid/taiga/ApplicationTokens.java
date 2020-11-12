@@ -1,5 +1,6 @@
 package org.affid.taiga;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -7,13 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ApplicationTokens {
-    public static JSONObject list(String serverUrl, String authToken) throws IOException {
-        URL url = new URL(serverUrl + "api/v1/application-tokens");
-        HttpURLConnection con = Utils.getConnection(url,serverUrl.contains("https"));
-
-        Utils.configure(con,authToken,"GET");
-
-        return Utils.getResponse(con);
+    public static JSONArray list(String serverUrl, String authToken) throws IOException {
+        return Utils.getList(serverUrl,authToken, "api/v1/application-tokens");
     }
 
     public static JSONObject get(String id,String serverUrl, String authToken) throws IOException {

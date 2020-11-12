@@ -1,5 +1,6 @@
 package org.affid.taiga;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -39,6 +40,18 @@ public class Utils {
         return resp;
     }
 
+    static JSONArray getList(String serverUrl, String authToken, String service) throws IOException {
+        URL url = new URL(serverUrl + service);
+        HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
+
+        Utils.configure(con, authToken, "GET");
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+        String line = reader.readLine();
+
+        return new JSONArray(line);
+    }
 
     public static String getNextRandomString(String strAllowedCharacters, int length) {
         Random random = new Random();
