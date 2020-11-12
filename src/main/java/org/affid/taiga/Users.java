@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class Users {
 
-    public static boolean cancelUser(String token, String cancelToken, String serverURL) throws IOException {
+    public static boolean cancel(String token, String cancelToken, String serverURL) throws IOException {
         URL url = new URL(serverURL + "/api/v1/users/cancel");
         HttpURLConnection con = Utils.getConnection(url, serverURL.contains("https"));
 
@@ -25,7 +25,7 @@ public class Users {
         return con.getResponseCode() == 204;
     }
 
-    public static boolean deleteUser(String token, String serverURL, String id) throws IOException {
+    public static boolean delete(String token, String serverURL, String id) throws IOException {
         URL url = new URL(serverURL + "/api/v1/users/" + id);
         HttpURLConnection con = Utils.getConnection(url, serverURL.contains("https"));
 
