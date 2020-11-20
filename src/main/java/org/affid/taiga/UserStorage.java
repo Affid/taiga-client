@@ -34,7 +34,8 @@ public class UserStorage {
         URL url = new URL(serverUrl + "api/v1/user-storage/" + key);
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
-        Utils.configure(con, authToken, "PATCH");
+        Utils.configure(con, authToken, "POST");
+        con.setRequestProperty("X-HTTP-Method-Override", "PATCH");
 
         JSONObject request = new JSONObject();
 

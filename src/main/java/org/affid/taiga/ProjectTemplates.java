@@ -53,7 +53,8 @@ public class ProjectTemplates {
         URL url = new URL(serverUrl + "api/v1/project-templates/" + id);
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
-        Utils.configure(con,adminAuthToken,"PATCH");
+        Utils.configure(con,adminAuthToken,"POST");
+        con.setRequestProperty("X-HTTP-Method-Override", "PATCH");
 
         Utils.sendRequest(con,newData);
 
