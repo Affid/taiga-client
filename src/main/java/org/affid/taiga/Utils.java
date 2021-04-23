@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Utils {
@@ -73,5 +74,17 @@ public class Utils {
         con.setRequestMethod(method);
         con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Authorization", "Bearer " + authToken);
+    }
+
+    public static String getStringFromParams(ArrayList<String> params) {
+        StringBuilder result = new StringBuilder();
+        if (!params.isEmpty()) {
+            result.append("?");
+            result.append(params.get(0));
+            for (int i = 1; i < params.size(); i++) {
+                result.append("&").append(params.get(i));
+            }
+        }
+        return result.toString();
     }
 }

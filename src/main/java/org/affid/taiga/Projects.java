@@ -3,11 +3,15 @@ package org.affid.taiga;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
+import static org.affid.taiga.Utils.getStringFromParams;
+
+@SuppressWarnings("unused")
 public class Projects {
     public enum Order {
         memberships__user_order,
@@ -72,32 +76,24 @@ public class Projects {
                 params.add("member=" + member);
             }
             if (members != null && member == null) {
-                params.add("members=" + new JSONArray(this.members).toString());
+                params.add("members=" + new JSONArray(this.members));
             }
             if (isLookingForPeople != null) {
-                params.add("&is_looking_for_people=" + isLookingForPeople.toString());
+                params.add("&is_looking_for_people=" + isLookingForPeople);
             }
             if (isFeatured != null) {
-                params.add("&is_featured=" + isFeatured.toString());
+                params.add("&is_featured=" + isFeatured);
             }
             if (isBacklogActivated != null) {
-                params.add("&is_backlog_activated=" + isBacklogActivated.toString());
+                params.add("&is_backlog_activated=" + isBacklogActivated);
             }
             if (isKanbanActivated != null) {
-                params.add("&is_kanban_activated=" + isKanbanActivated.toString());
+                params.add("&is_kanban_activated=" + isKanbanActivated);
             }
             if (orderedBy != null) {
                 params.add("order_by=" + orderedBy.name());
             }
-            StringBuilder result = new StringBuilder();
-            if (!params.isEmpty()) {
-                result.append("?");
-                result.append(params.get(0));
-                for (int i = 1; i < params.size(); i++) {
-                    result.append("&").append(params.get(i));
-                }
-            }
-            return result.toString();
+            return getStringFromParams(params);
         }
 
         public boolean isEmpty() {
@@ -118,7 +114,7 @@ public class Projects {
         if (filter == null || filter.isEmpty())
             return Utils.getList(serverUrl, authToken, "api/v1/projects");
         else
-            return Utils.getList(serverUrl, authToken, "api/v1/projects" + filter.toString());
+            return Utils.getList(serverUrl, authToken, "api/v1/projects" + filter);
     }
 
     public static JSONObject create(String serverUrl, String authToken, JSONObject body) throws IOException {
@@ -271,18 +267,18 @@ public class Projects {
         return con.getResponseCode() == 200;
     }
 
-    public static boolean mixTags(String serverUrl, String authToken,String id, ArrayList<String> fromTags, String toTag) throws IOException {
+    public static boolean mixTags(String serverUrl, String authToken, String id, ArrayList<String> fromTags, String toTag) throws IOException {
         URL url = new URL(serverUrl + "api/v1/projects/" + id + "/mix_tags");
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
         Utils.configure(con, authToken, "POST");
-        JSONObject request = new JSONObject().put("to_tag",toTag).put("from_tags",fromTags);
+        JSONObject request = new JSONObject().put("to_tag", toTag).put("from_tags", fromTags);
         Utils.sendRequest(con, request);
 
         return con.getResponseCode() == 200;
     }
 
-    public static boolean likeProject(String serverUrl, String authToken,String id) throws IOException {
+    public static boolean likeProject(String serverUrl, String authToken, String id) throws IOException {
         URL url = new URL(serverUrl + "api/v1/projects/" + id + "/like");
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
@@ -291,7 +287,7 @@ public class Projects {
         return con.getResponseCode() == 200;
     }
 
-    public static boolean unlikeProject(String serverUrl, String authToken,String id) throws IOException {
+    public static boolean unlikeProject(String serverUrl, String authToken, String id) throws IOException {
         URL url = new URL(serverUrl + "api/v1/projects/" + id + "/unlike");
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
@@ -300,11 +296,11 @@ public class Projects {
         return con.getResponseCode() == 200;
     }
 
-    public static JSONArray listProjectFans(String serverUrl, String authToken,String id) throws IOException {
+    public static JSONArray listProjectFans(String serverUrl, String authToken, String id) throws IOException {
         return Utils.getList(serverUrl, authToken, "api/v1/projects/" + id + "/fans");
     }
 
-    public static boolean watchProject(String serverUrl, String authToken,String id) throws IOException {
+    public static boolean watchProject(String serverUrl, String authToken, String id) throws IOException {
         URL url = new URL(serverUrl + "api/v1/projects/" + id + "/watch");
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
@@ -313,7 +309,7 @@ public class Projects {
         return con.getResponseCode() == 200;
     }
 
-    public static boolean stopWatchingProject(String serverUrl, String authToken,String id) throws IOException {
+    public static boolean stopWatchingProject(String serverUrl, String authToken, String id) throws IOException {
         URL url = new URL(serverUrl + "api/v1/projects/" + id + "/unwatch");
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
@@ -322,7 +318,7 @@ public class Projects {
         return con.getResponseCode() == 200;
     }
 
-    public static JSONArray listProjectWatchers(String serverUrl, String authToken,String id) throws IOException {
+    public static JSONArray listProjectWatchers(String serverUrl, String authToken, String id) throws IOException {
         return Utils.getList(serverUrl, authToken, "api/v1/projects/" + id + "/watchers");
     }
 
@@ -331,18 +327,38 @@ public class Projects {
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
         Utils.configure(con, adminAuthToken, "POST");
-        JSONObject request = new JSONObject().put("template_name", name).put("template_description",desription);
+        JSONObject request = new JSONObject().put("template_name", name).put("template_description", desription);
         Utils.sendRequest(con, request);
 
         return Utils.getResponse(con);
     }
 
-    public static boolean leave(String serverUrl, String authToken,String id) throws IOException {
+    public static boolean leave(String serverUrl, String authToken, String id) throws IOException {
         URL url = new URL(serverUrl + "api/v1/projects/" + id + "/leave");
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
         Utils.configure(con, authToken, "POST");
 
         return con.getResponseCode() == 200;
+    }
+
+    public static JSONObject changeLogo(String serverUrl, String authToken, String id, File logo) throws IOException {
+        URL url = new URL(serverUrl + "api/v1/projects/" + id + "/change_logo");
+        HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
+
+        con.setRequestProperty("Authorization", "Bearer " + authToken);
+        MultipartUtility multipart = new MultipartUtility(con, "UTF-8");
+
+        multipart.addFilePart("logo", logo);
+
+        List<String> response = multipart.finish();
+
+        System.out.println("SERVER REPLIED:");
+
+        for (String line : response) {
+            System.out.println(line);
+        }
+
+        return Utils.getResponse(multipart.getHttpConn());
     }
 }

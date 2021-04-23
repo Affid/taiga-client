@@ -4,9 +4,37 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
 
 public class Users {
+
+    public static JSONObject get(String serverUrl, String authToken, int id) throws IOException {
+        URL url = new URL(serverUrl + "api/v1/users/" + id);
+        HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
+
+        Utils.configure(con,authToken,"GET");
+
+        return Utils.getResponse(con);
+    }
+
+    public static JSONObject list(String serverUrl, String authToken, int projectId) throws IOException {
+        URL url = new URL(serverUrl + "api/v1/users?project=" + projectId);
+        HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
+
+        Utils.configure(con,authToken,"GET");
+
+        return Utils.getResponse(con);
+    }
+
+    public static JSONObject list(String serverUrl, String authToken) throws IOException {
+        URL url = new URL(serverUrl + "api/v1/users");
+        HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
+
+        Utils.configure(con,authToken,"GET");
+
+        return Utils.getResponse(con);
+    }
 
     public static boolean cancel(String token, String cancelToken, String serverURL) throws IOException {
         URL url = new URL(serverURL + "/api/v1/users/cancel");
