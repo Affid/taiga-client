@@ -171,9 +171,11 @@ public class UserStories {
     }
 
     public static JSONArray list(String serverUrl, String authToken, Filter filter) throws IOException {
-        if (filter == null || filter.isEmpty())
+        if (filter == null || filter.isEmpty()) {
             return Utils.getList(serverUrl, authToken, "api/v1/userstories");
-        else
+        }
+        else {
             return Utils.getList(serverUrl, authToken, "api/v1/userstories" + filter);
+        }
     }
 }

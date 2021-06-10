@@ -18,7 +18,7 @@ public class TaskCustomAttributes {
 
     public static class Values{
         public static JSONObject get(String serverUrl, String authToken, String taskId) throws IOException {
-            URL url = new URL(serverUrl + "api/v1/userstories/custom-attributes-values/" + taskId);
+            URL url = new URL(serverUrl + "api/v1/tasks/custom-attributes-values/" + taskId);
             HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
             Utils.configure(con,authToken,"GET");

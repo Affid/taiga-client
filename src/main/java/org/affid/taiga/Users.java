@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class Users {
 
-    public static JSONObject get(String serverUrl, String authToken, int id) throws IOException {
+    public static JSONObject get(String serverUrl, String authToken, long id) throws IOException {
         URL url = new URL(serverUrl + "api/v1/users/" + id);
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
@@ -18,7 +18,7 @@ public class Users {
         return Utils.getResponse(con);
     }
 
-    public static JSONObject list(String serverUrl, String authToken, int projectId) throws IOException {
+    public static JSONObject list(String serverUrl, String authToken, long projectId) throws IOException {
         URL url = new URL(serverUrl + "api/v1/users?project=" + projectId);
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 

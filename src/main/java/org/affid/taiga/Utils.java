@@ -45,7 +45,9 @@ public class Utils {
         URL url = new URL(serverUrl + service);
         HttpURLConnection con = Utils.getConnection(url, serverUrl.contains("https"));
 
+
         Utils.configure(con, authToken, "GET");
+        con.setRequestProperty("x-disable-pagination", "");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 

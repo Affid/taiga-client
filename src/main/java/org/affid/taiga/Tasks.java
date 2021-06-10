@@ -168,7 +168,7 @@ public class Tasks {
         return list(serverUrl, authToken, null);
     }
 
-    public static JSONArray list(String serverUrl, String authToken, UserStories.Filter filter) throws IOException {
+    public static JSONArray list(String serverUrl, String authToken, Filter filter) throws IOException {
         if (filter == null || filter.isEmpty())
             return Utils.getList(serverUrl, authToken, "api/v1/tasks");
         else

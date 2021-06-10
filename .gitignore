@@ -4,3 +4,4 @@ src/test
 src/main/java/org/affid/taiga/Test.java
 src/main/java/org/affid/taiga/TaigaClient.java
 target
+/mvnadd.txt
